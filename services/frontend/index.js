@@ -87,4 +87,33 @@ document.addEventListener('DOMContentLoaded', function () {
             swal('Erro', 'Erro ao listar os produtos', 'error');
             console.error(err);
         });
+
+    function searchProductById(id) {
+        fetch('http://localhost:3000/product/' + id)
+            .then((data) => {
+                if (data.ok) {
+                    return data.json();
+                }
+                throw data.statusText;
+            })
+            .then((book) => {
+                books.innerHTML = '';
+                books.appendChild(newBook(book));
+            })
+            .catch((err) => {
+                swal('Erro', 'Produto não encontrado', 'error');
+                console.error(err);
+            });
+    }
+
+    document.getElementById('searchByIdButton').addEventListener('click', function () {
+        const productIdInput = document.querySelector('input[type="text"]');
+        const productId = productIdInput.value.trim();
+
+        if (productId !== '') {
+            searchProductById(productId);
+        } else {
+            swal('Erro', 'Por favor, insira um ID válido', 'error');
+        }
+    });
 });
